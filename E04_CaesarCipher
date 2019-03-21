@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class E04_CaesarCipher {
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        System.out.println(cypher(input));
+
+
+    }
+
+    private static String cypher(String input) {
+        String cypher = "";
+
+
+        for (int i = 0; i <input.length(); i++) {
+            char currChar = input.charAt(i);
+            currChar += 3;
+            cypher += currChar;
+        }
+
+
+        return  cypher;
+    }
+}
