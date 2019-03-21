@@ -1,0 +1,34 @@
+import java.util.Scanner;
+
+public class E02_CharacterMultiplier {
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+      String text = scanner.nextLine();
+
+      String firstWord = text.substring(0, text.indexOf(' '));
+      String secondWord = text.substring(text.lastIndexOf(' ') + 1);
+
+        System.out.println(mutliplyCharacters(firstWord, secondWord));
+
+    }
+
+    private static int mutliplyCharacters(String firstWord, String secondWord) {
+        int sum = 0;
+        int minLength = Math.min(firstWord.length(), secondWord.length());
+
+        for (int i = 0; i <minLength ; i++) {
+            sum += firstWord.charAt(i) * secondWord.charAt(i);
+        }
+
+        String maxLength =
+                firstWord.length() < secondWord.length()
+                ? secondWord : firstWord;
+
+        for (int i = minLength; i < maxLength.length(); i++) {
+            sum += maxLength.charAt(i);
+        }
+
+        return sum;
+    }
+}
