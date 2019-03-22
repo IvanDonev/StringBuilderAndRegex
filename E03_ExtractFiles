@@ -1,0 +1,17 @@
+import java.util.Scanner;
+
+public class E03_ExtractFiles {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] inputPath = scanner.nextLine().split("[\\\\]+");
+        String lastWord = inputPath[inputPath.length - 1];
+
+        String fileType = lastWord.substring(0, lastWord.lastIndexOf('.'));
+        String fileExtension = lastWord.substring(lastWord.lastIndexOf('.') + 1);
+
+
+        System.out.println(String.format("File name: %s\n" +
+                "File extension: %s\n", fileType, fileExtension));
+    }
+}
