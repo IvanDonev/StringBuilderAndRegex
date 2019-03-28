@@ -1,0 +1,28 @@
+import java.util.Scanner;
+
+public class E05_MultiplyBigNumbers {
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+        StringBuilder numInput = new StringBuilder(scanner.nextLine());
+        int multiplier = Integer.parseInt(scanner.nextLine());
+        StringBuilder finalReuslt = new StringBuilder();
+
+        int remainder = 0;
+        while (numInput.length() > 0){
+            int currInput = Integer.parseInt(String.valueOf(numInput.charAt(numInput.length() - 1)));
+            int result = (currInput * multiplier) + remainder;
+            remainder = result / 10;
+            finalReuslt.append(result % 10);
+
+            numInput.deleteCharAt(numInput.length()- 1);
+        }
+
+        if (remainder > 0){
+            finalReuslt.append(remainder);
+        }
+
+        finalReuslt.reverse();
+        System.out.println(finalReuslt);
+    }
+}
