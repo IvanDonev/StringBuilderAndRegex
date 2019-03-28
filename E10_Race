@@ -1,0 +1,54 @@
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+public class E10_Race {
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Integer> participantsResults = new LinkedHashMap<>();
+
+        String[] inputPeople  = scanner.nextLine().split(", ");
+
+        for (int i = 0; i <inputPeople.length; i++) {
+            participantsResults.putIfAbsent(inputPeople[i], 0);
+        }
+
+        String command = scanner.nextLine();
+        Pattern charPattern = Pattern.compile("[A-Za-z]");
+        Pattern kmPattern = charPattern.compile("[\\d]");
+
+
+        while (!command.equalsIgnoreCase("end of race")){
+            StringBuilder currentParticipant = new StringBuilder();
+            Matcher matcher = charPattern.matcher(command);
+            while (matcher.find()){
+                currentParticipant.append(matcher.group());
+            }
+
+            Matcher kmMatcher = kmPattern.matcher(command);
+
+            int currKM = 0;
+            while (kmMatcher.find()){
+                currKM += Integer.parseInt(kmMatcher.group());
+            }
+
+            if (participantsResults.containsKey(currentParticipant.toString())){
+                participantsResults.put(currentParticipant.toString(), participantsResults.get(currentParticipant.toString()) + currKM);
+            }
+
+
+            command = scanner.nextLine();
+        }
+
+       Map sorted = participantsResults.entrySet().stream().sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue())).limit(3)
+               .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                       (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        List<String> winners = new ArrayList<>(sorted.keySet());
+        System.out.println(String.format("1st place: %s", winners.get(0)));
+        System.out.println(String.format("2nd place: %s", winners.get(1)));
+        System.out.println(String.format("3rd place: %s", winners.get(2)));
+    }
+}
