@@ -1,0 +1,55 @@
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class E13_NetherRealms {
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+        String[] inputMonsters = scanner.nextLine().split("[,\\s]+");
+        Pattern charPattern = Pattern.compile("[a-z]", Pattern.CASE_INSENSITIVE);
+        Pattern numberPattern = Pattern.compile("[\\d+-.]+");
+        Pattern specialChar = Pattern.compile("[^.\\-\\d\\w]");
+
+        Map<String ,Map<Integer, Double>> realmBook = new LinkedHashMap<>();
+
+        for (int i = 0; i < inputMonsters.length; i++) {
+            Matcher charMatch = charPattern.matcher(inputMonsters[i]);
+            int currHealth = 0;
+            double currDamage = 0;
+            while (charMatch.find()){
+                char currChar = charMatch.group().charAt(0);
+                currHealth += currChar;
+            }
+
+            Matcher numberMatch = numberPattern.matcher(inputMonsters[i]);
+            while (numberMatch.find()){
+                double currentNumber = Double.parseDouble(numberMatch.group());
+                currDamage += currentNumber;
+            }
+
+
+            Matcher specialMatch = specialChar.matcher(inputMonsters[i]);
+
+            while (specialMatch.find()){
+                if (specialMatch.group().equals("/")){
+                    currDamage /= 2;
+                } else if (specialMatch.group().equals("*")){
+                    currDamage *= 2;
+                }
+            }
+
+            realmBook.putIfAbsent(inputMonsters[i], new LinkedHashMap<>());
+            realmBook.get(inputMonsters[i]).put(currHealth, currDamage);
+
+
+        }
+
+        realmBook.entrySet().stream().sorted((k1, k2) -> k1.getKey().compareTo(k2.getKey())).forEach(e1 -> {
+            e1.getValue().entrySet().stream().forEach(v1 -> {
+                System.out.println(String.format("%s - %d health, %.2f damage", e1.getKey(), v1.getKey(), v1.getValue()));
+            });
+        });
+
+    }
+}
