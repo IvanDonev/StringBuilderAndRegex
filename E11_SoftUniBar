@@ -1,0 +1,55 @@
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class E11_SoftUniBar {
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+        String regex = "%(?<name>[A-Z]{0,1}[a-z]+)%([^|%$.]*)<(?<productName>[\\w]+)>([^|%$.]*)[|](?<quantity>\\d+)[|]([^|%$.\\d]*)(?<price>[\\d]+.[\\d]*)[$]";
+        Pattern pattern  = Pattern.compile(regex);
+        Map<String, Map<String, Double>> barList = new LinkedHashMap<>();
+
+        while (!input.equalsIgnoreCase("end of shift")){
+          Matcher matcher = pattern.matcher(input);
+
+
+          while (matcher.find()){
+            barList.putIfAbsent(matcher.group("name"), new LinkedHashMap<>());
+            double currQuantity = Double.parseDouble(matcher.group("quantity"));
+            double currPrice = Double.parseDouble(matcher.group("price"));
+
+            double totalPrice = currQuantity * currPrice;
+            barList.get(matcher.group("name")).putIfAbsent(matcher.group("productName"), totalPrice);
+          }
+
+            input = scanner.nextLine();
+        }
+
+        AtomicReference<Double> totalPrice = new AtomicReference<>((double) 0);
+       barList.entrySet().stream().forEach(e -> {
+           e.getValue().entrySet().forEach(p -> {
+
+               System.out.println(String.format("%s: %s - %.2f", e.getKey(), p.getKey(), p.getValue()));
+                totalPrice.updateAndGet(v -> new Double((double) (v + p.getValue())));
+           });
+
+       });
+
+       double result = Double.parseDouble(totalPrice.toString());
+        System.out.println(String.format("Total income: %.2f", result));
+
+
+    }
+
+    private static void calculateTotalPrice(Double value, Double totalPrice) {
+        totalPrice += value;
+
+    }
+}
+
+80/100
