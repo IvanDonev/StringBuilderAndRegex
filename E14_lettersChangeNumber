@@ -1,0 +1,59 @@
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class E14_lettersChangeNumber {
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+        String[] inputWords = scanner.nextLine().split("\\s+");
+
+        Pattern pattern = Pattern.compile("(?<beforeNumber>[A-Za-z])(?<number>\\d+)(?<afterNumber>[A-Za-z])");
+
+        double result = 0;
+
+        for (int i = 0; i <inputWords.length; i++) {
+            Matcher matcher = pattern.matcher(inputWords[i]);
+
+            while (matcher.find()){
+                char beforeNumber = matcher.group("beforeNumber").charAt(0);
+                char afterNumber = matcher.group("afterNumber").charAt(0);
+                boolean isUpperCaseBeforeNumber = false;
+                boolean isUpperCaseAfterNumber = false;
+                double inputNumber = Double.parseDouble(matcher.group("number"));
+
+                if (Character.isUpperCase(beforeNumber)){
+                    beforeNumber -= 64;
+                    isUpperCaseBeforeNumber = true;
+                } else {
+                    beforeNumber -= 96;
+                }
+
+                if (Character.isUpperCase(afterNumber)){
+                    afterNumber -= 64;
+                    isUpperCaseAfterNumber = true;
+                } else {
+                    afterNumber -= 96;
+                }
+
+
+                if(isUpperCaseBeforeNumber){
+                    inputNumber /= beforeNumber;
+                } else {
+                    inputNumber *= beforeNumber;
+                }
+
+                if (isUpperCaseAfterNumber){
+                    inputNumber -= afterNumber;
+                } else {
+                    inputNumber += afterNumber;
+                }
+
+            result += inputNumber;
+            }
+
+        }
+
+
+        System.out.println(String.format("%.2f", result));
+    }
+}
